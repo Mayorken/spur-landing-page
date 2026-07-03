@@ -152,13 +152,13 @@
 </div>
 <!-- Waitlist Form -->
 <div class="max-w-md mx-auto">
-<form class="flex flex-col md:flex-row gap-3">
-<input class="flex-grow bg-midnight border-b border-safety-teal focus:border-intent-pink focus:ring-0 text-white px-4 py-3 placeholder:text-on-surface-variant/50 transition-all bg-surface-container-low rounded-t-lg md:rounded-l-lg md:rounded-tr-none" placeholder="Your discreet email" type="email"/>
-<button class="bg-intent-pink text-white px-8 py-3 rounded-b-lg md:rounded-r-lg md:rounded-bl-none font-bold hover:bg-opacity-90 transition-all">
+<form id="waitlist-form" class="flex flex-col md:flex-row gap-3" onsubmit="handleWaitlistSubmit(event)">
+<input id="email-input" class="flex-grow bg-midnight border-b border-safety-teal focus:border-intent-pink focus:ring-0 text-white px-4 py-3 placeholder:text-on-surface-variant/50 transition-all bg-surface-container-low rounded-t-lg md:rounded-l-lg md:rounded-tr-none" placeholder="Your discreet email" type="email" required/>
+<button id="submit-btn" type="submit" class="bg-intent-pink text-white px-8 py-3 rounded-b-lg md:rounded-r-lg md:rounded-bl-none font-bold hover:bg-opacity-90 transition-all">
                             Join the Waitlist
                         </button>
 </form>
-<p class="text-label-sm font-label-sm text-on-surface-variant mt-4 opacity-60">Launching in selected metros. Coming Soon.</p>
+<p id="status-message" class="text-label-sm font-label-sm text-on-surface-variant mt-4 opacity-60">Launching in selected metros. Coming Soon.</p>
 </div>
 </div>
 </section>
@@ -338,6 +338,87 @@
 </div>
 </footer>
 <script>
+        // API Configuration
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:8000/api/v1'
+            : 'https://api.spur.app/api/v1';
+
+        // Waitlist Form Handler
+        async function handleWaitlistSubmit(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('waitlist-form');
+            const emailInput = document.getElementById('email-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const statusMessage = document.getElementById('status-message');
+            const email = emailInput.value.trim();
+
+            if (!email) return;
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Joining...';
+            statusMessage.style.opacity = '0.6';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/waitlist/join`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        newsletter: true,
+                        metro: 'San Francisco'  // Can be customized based on user location
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok || data.status === 'already_exists') {
+                    // Success
+                    if (data.status === 'already_exists') {
+                        statusMessage.textContent = '✓ Already on the waitlist!';
+                        statusMessage.style.color = '#2DD4BF';
+                    } else {
+                        statusMessage.textContent = `✓ Success! You're #${data.position} on the waitlist.`;
+                        statusMessage.style.color = '#2DD4BF';
+                    }
+
+                    // Reset form
+                    form.reset();
+                    emailInput.value = '';
+
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Join the Waitlist';
+                        statusMessage.textContent = 'Launching in selected metros. Coming Soon.';
+                        statusMessage.style.color = '';
+                        statusMessage.style.opacity = '0.6';
+                    }, 3000);
+                } else {
+                    // Error
+                    statusMessage.textContent = data.detail || 'Something went wrong. Please try again.';
+                    statusMessage.style.color = '#ffb4ab';
+                    statusMessage.style.opacity = '1';
+
+                    // Reset button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Join the Waitlist';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusMessage.textContent = 'Connection error. Please try again.';
+                statusMessage.style.color = '#ffb4ab';
+                statusMessage.style.opacity = '1';
+
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Join the Waitlist';
+            }
+        }
+
         // Micro-interaction for Intent Button
         const intentBtn = document.querySelector('.intent-button-glow');
         if (intentBtn) {
