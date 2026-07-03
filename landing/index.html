@@ -1,557 +1,369 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPUR - Real-Time Adult Connection Platform | Desire. Consent. Connection.</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-            --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Spur | Desire. Consent. Connection Instantly.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&amp;family=Geist:wght@400;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 46, 99, 0.4), 0 0 40px rgba(168, 85, 247, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 46, 99, 0.7), 0 0 80px rgba(168, 85, 247, 0.4); }
         }
-
-        * {
-            scroll-behavior: smooth;
+        .intent-button-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
         }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #b300ff 0%, #ff006e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .glass-card {
+            background: rgba(22, 22, 29, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-
-        /* Hero button with press feedback */
-        .btn-primary {
-            transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
-            position: relative;
-            overflow: hidden;
+        .glass-card:hover {
+            border-color: rgba(255, 46, 99, 0.3);
+            background: rgba(22, 22, 29, 0.8);
         }
-
-        .btn-primary:active {
-            transform: scale(0.97);
+        body {
+            background-color: #0A0A0C;
+            color: #e0e3e5;
         }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transition: opacity 160ms var(--ease-out);
-        }
-
-        .btn-primary:active::before {
-            opacity: 1;
-        }
-
-        /* Fade in with stagger */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 600ms var(--ease-out) forwards;
-            opacity: 0;
-        }
-
-        .delay-1 { animation-delay: 100ms; }
-        .delay-2 { animation-delay: 200ms; }
-        .delay-3 { animation-delay: 300ms; }
-        .delay-4 { animation-delay: 400ms; }
-
-        /* Hover scale for cards */
-        .card-hover {
-            transition: transform 250ms var(--ease-out), box-shadow 250ms var(--ease-out);
-        }
-
-        .card-hover:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(179, 0, 255, 0.15);
-        }
-
-        /* Icon animations */
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
-
-        .icon-pulse {
-            animation: iconPulse 2s var(--ease-in-out) infinite;
-        }
-
-        /* Smooth section appear */
-        @keyframes sectionFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        section {
-            animation: sectionFadeIn 800ms var(--ease-out) forwards;
-            animation-timeline: view();
-            animation-range: entry 0% cover 30%;
-        }
-
-        /* Intent step numbers */
-        .step-number {
-            transition: all 300ms var(--ease-out);
-        }
-
-        .step-number svg {
-            transition: transform 300ms var(--ease-out);
-        }
-
-        .card-hover:hover .step-number {
-            transform: scale(1.15);
-        }
-
-        .card-hover:hover .step-number svg {
-            transform: rotate(6deg) scale(1.1);
-        }
-
-        /* Smooth tooltip-like effect */
-        .nav-link {
-            position: relative;
-            transition: color 200ms var(--ease-out);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #b300ff, #ff006e);
-            transition: width 250ms var(--ease-out);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        /* Icon container glow on hover */
-        .icon-glow {
-            transition: all 250ms var(--ease-out);
-        }
-
-        .card-hover:hover .icon-glow {
-            filter: drop-shadow(0 0 12px rgba(179, 0, 255, 0.6));
-        }
-
-        /* Smooth backdrop blur for hero */
-        @keyframes heroGlow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.5; }
-        }
-
-        .hero-glow {
-            animation: heroGlow 4s ease-in-out infinite;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
+        .text-glow-pink {
+            text-shadow: 0 0 15px rgba(255, 46, 99, 0.5);
         }
     </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#101415",
+                        "surface-container-lowest": "#0b0f10",
+                        "surface-tint": "#c8c6c8",
+                        "on-background": "#e0e3e5",
+                        "inverse-primary": "#5f5e60",
+                        "background": "#101415",
+                        "on-error": "#690005",
+                        "primary": "#c8c6c8",
+                        "tertiary": "#e9c349",
+                        "primary-container": "#0a0a0c",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#323537",
+                        "secondary-fixed": "#e4e1eb",
+                        "inverse-on-surface": "#2d3133",
+                        "on-secondary-fixed-variant": "#47464e",
+                        "surface-container-low": "#191c1e",
+                        "tertiary-fixed": "#ffe088",
+                        "on-primary-fixed": "#1c1b1d",
+                        "on-surface-variant": "#c8c5ca",
+                        "secondary-container": "#494850",
+                        "surface-container-high": "#272a2c",
+                        "on-tertiary-container": "#947600",
+                        "tertiary-container": "#0f0a00",
+                        "primary-fixed-dim": "#c8c6c8",
+                        "secondary": "#c8c5cf",
+                        "on-primary": "#313032",
+                        "on-secondary-fixed": "#1b1b22",
+                        "surface": "#101415",
+                        "inverse-surface": "#e0e3e5",
+                        "surface-bright": "#363a3b",
+                        "primary-fixed": "#e5e1e4",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-secondary-container": "#b9b7c1",
+                        "surface-container": "#1d2022",
+                        "on-surface": "#e0e3e5",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#323537",
+                        "on-tertiary": "#3c2f00",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "on-primary-container": "#7a797b",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-primary-fixed-variant": "#474649",
+                        "error-container": "#93000a",
+                        "outline": "#919095",
+                        "on-secondary": "#303037",
+                        "secondary-fixed-dim": "#c8c5cf",
+                        "outline-variant": "#47464a",
+                        "intent-pink": "#FF2E63",
+                        "safety-teal": "#2DD4BF"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-max": "1200px",
+                        "gutter": "24px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Geist"],
+                        "label-sm": ["Geist"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Geist"]
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-slate-950 text-white overflow-x-hidden">
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-3 fade-in-up">
-                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center font-black text-lg">S</div>
-                    <span class="font-black text-2xl">SPUR</span>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#how" class="nav-link text-gray-300 hover:text-white transition">How It Works</a>
-                    <a href="#intent" class="nav-link text-gray-300 hover:text-white transition">Intent Modes</a>
-                    <a href="#safety" class="nav-link text-gray-300 hover:text-white transition">Safety</a>
-                </div>
-                <a href="#download" class="btn-primary bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6 py-2 rounded-lg font-semibold rounded-lg">
-                    Download
-                </a>
-            </div>
-        </div>
-    </nav>
+<body class="font-body-md selection:bg-intent-pink selection:text-white">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-white/10 shadow-sm">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="text-headline-md font-headline-md font-bold tracking-tighter text-on-surface">Spur</div>
+<div class="hidden md:flex items-center space-x-12">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300" href="#">The Intent</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300" href="#">Safety</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300" href="#">Spur+</a>
+</div>
+<button class="bg-intent-pink text-white px-6 py-2 rounded-full font-label-sm text-label-sm active:scale-95 transition-all duration-150 hover:shadow-[0_0_15px_rgba(255,46,99,0.5)]">
+                Join Waitlist
+            </button>
+</div>
+</nav>
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex flex-col items-center justify-center text-center px-margin-mobile overflow-hidden">
 
-    <!-- Hero Section -->
-    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <div class="inline-block mb-4 px-4 py-2 bg-purple-500/20 border border-purple-500/50 rounded-full fade-in-up delay-1">
-                        <span class="text-purple-300 font-semibold">⚡ Real-Time Connection Platform</span>
-                    </div>
-
-                    <h1 class="text-6xl md:text-7xl font-black mb-6 leading-tight fade-in-up delay-2">
-                        Desire.
-                        <br />
-                        Consent.
-                        <br />
-                        <span class="gradient-text">Connection.</span>
-                    </h1>
-
-                    <p class="text-2xl text-gray-200 mb-8 font-semibold fade-in-up delay-3">
-                        One tap. Mutual intent. Instant match.
-                    </p>
-
-                    <p class="text-lg text-gray-400 mb-12 leading-relaxed fade-in-up delay-4">
-                        Stop waiting days for a maybe. Spur matches you with nearby people on real-time, mutual intent. No swiping. No ambiguity. Just honest connection in the moment you want it.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 fade-in-up delay-4">
-                        <a href="#download" class="btn-primary bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-lg font-bold text-lg text-center">
-                            Get Started
-                        </a>
-                        <button onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})" class="btn-primary border-2 border-purple-600 hover:bg-purple-600/10 px-8 py-4 rounded-lg font-bold text-lg transition">
-                            How It Works
+<div class="relative z-10 max-w-4xl mx-auto space-y-8">
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg leading-tight tracking-tight">
+                    Desire. Consent.<br/><span class="text-intent-pink text-glow-pink">Connection Instantly.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                    Spur is the real-time adult connection platform. No swiping, no waiting—just mutual intent.
+                </p>
+<!-- Glowing Intent Button -->
+<div class="py-12 flex justify-center">
+<button class="relative group cursor-pointer">
+<div class="absolute -inset-1 bg-gradient-to-r from-intent-pink to-purple-600 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+<div class="intent-button-glow relative flex items-center justify-center w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-intent-pink to-purple-600 border-4 border-white/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-5xl text-white" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+</button>
+</div>
+<!-- Waitlist Form -->
+<div class="max-w-md mx-auto">
+<form class="flex flex-col md:flex-row gap-3">
+<input class="flex-grow bg-midnight border-b border-safety-teal focus:border-intent-pink focus:ring-0 text-white px-4 py-3 placeholder:text-on-surface-variant/50 transition-all bg-surface-container-low rounded-t-lg md:rounded-l-lg md:rounded-tr-none" placeholder="Your discreet email" type="email"/>
+<button class="bg-intent-pink text-white px-8 py-3 rounded-b-lg md:rounded-r-lg md:rounded-bl-none font-bold hover:bg-opacity-90 transition-all">
+                            Join the Waitlist
                         </button>
-                    </div>
+</form>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-4 opacity-60">Launching in selected metros. Coming Soon.</p>
+</div>
+</div>
+</section>
+<!-- Problem / Solution -->
+<section class="py-24 px-margin-mobile max-w-container-max mx-auto">
+<div class="grid md:grid-cols-2 gap-gutter items-center">
+<div class="glass-card p-10 rounded-2xl border-l-4 border-on-surface-variant/20">
+<h3 class="font-headline-md text-headline-md mb-6 opacity-60">The Gap</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        Traditional apps focus on the digital shelf. You swipe for days, talk for weeks, only for the spark to vanish before you even meet. Modern connection is broken by delay.
+                    </p>
+</div>
+<div class="glass-card p-10 rounded-2xl border-l-4 border-intent-pink bg-surface-container-high relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-intent-pink/30 text-6xl">flash_on</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-6 text-intent-pink">The Spark</h3>
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+                        One Tap. Mutual Intent. Instant Match. Spur bridges the gap by prioritizing presence and current mood. Connect with people who are looking for the same thing, exactly when you are.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Key Features Grid -->
+<section class="py-24 px-margin-mobile max-w-container-max mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4">Engineered for Action</h2>
+<p class="font-body-lg text-on-surface-variant">Discreet. Precise. Secure.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- 1 -->
+<div class="glass-card p-8 rounded-2xl group transition-all">
+<span class="material-symbols-outlined text-intent-pink mb-4 text-3xl">touch_app</span>
+<h4 class="font-headline-md text-headline-md mb-3">Instant Intent Mode</h4>
+<p class="text-on-surface-variant">Activate your availability with a single tap. Your profile only appears when you're looking to connect.</p>
+</div>
+<!-- 2 -->
+<div class="glass-card p-8 rounded-2xl group transition-all">
+<span class="material-symbols-outlined text-intent-pink mb-4 text-3xl">location_on</span>
+<h4 class="font-headline-md text-headline-md mb-3">Ultra-Local Radius</h4>
+<p class="text-on-surface-variant">Precision discovery. Find matches in the same venue or building for immediate real-world transition.</p>
+</div>
+<!-- 3 -->
+<div class="glass-card p-8 rounded-2xl group transition-all">
+<span class="material-symbols-outlined text-intent-pink mb-4 text-3xl">local_fire_department</span>
+<h4 class="font-headline-md text-headline-md mb-3">Hookup Mode</h4>
+<p class="text-on-surface-variant">A dedicated space for the casual-minded. Explicit intent markers to ensure everyone is on the same page.</p>
+</div>
+<!-- 4 -->
+<div class="glass-card p-8 rounded-2xl group transition-all">
+<span class="material-symbols-outlined text-tertiary mb-4 text-3xl">favorite</span>
+<h4 class="font-headline-md text-headline-md mb-3">Relationship Mode</h4>
+<p class="text-on-surface-variant">A compatibility layer for deeper ties. Find users looking for long-term depth with shared values.</p>
+</div>
+<!-- 5 -->
+<div class="glass-card p-8 rounded-2xl group transition-all">
+<span class="material-symbols-outlined text-safety-teal mb-4 text-3xl">shield_with_heart</span>
+<h4 class="font-headline-md text-headline-md mb-3">Privacy by Design</h4>
+<p class="text-on-surface-variant">No public profiles to browse. Chats auto-clear after 24 hours. Your digital footprint remains invisible.</p>
+</div>
+<!-- 6 -->
+<div class="glass-card p-8 rounded-2xl group transition-all">
+<span class="material-symbols-outlined text-safety-teal mb-4 text-3xl">verified_user</span>
+<h4 class="font-headline-md text-headline-md mb-3">Safety Layer</h4>
+<p class="text-on-surface-variant">AI-driven bot detection and biometric verification for all users. Integrated emergency panic button.</p>
+</div>
+</div>
+</section>
+<!-- Market Comparison -->
+<section class="py-24 bg-surface-container-low/50">
+<div class="max-w-container-max mx-auto px-margin-mobile">
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-center mb-16">How We Compare</h2>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-white/10">
+<th class="py-6 px-4 font-headline-md text-on-surface-variant/50">Metric</th>
+<th class="py-6 px-4 font-headline-md opacity-40">Tinder/Bumble</th>
+<th class="py-6 px-4 font-headline-md opacity-40">Grindr/Scruff</th>
+<th class="py-6 px-4 font-headline-md text-intent-pink">Spur</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr>
+<td class="py-6 px-4 font-medium">Match Speed</td>
+<td class="py-6 px-4 text-on-surface-variant">Days</td>
+<td class="py-6 px-4 text-on-surface-variant">Minutes</td>
+<td class="py-6 px-4 font-bold text-white">Seconds</td>
+</tr>
+<tr>
+<td class="py-6 px-4 font-medium">Intent Clarity</td>
+<td class="py-6 px-4 text-on-surface-variant">Vague</td>
+<td class="py-6 px-4 text-on-surface-variant">Explicit</td>
+<td class="py-6 px-4 font-bold text-white">Mutual &amp; Verified</td>
+</tr>
+<tr>
+<td class="py-6 px-4 font-medium">Real-time Focus</td>
+<td class="py-6 px-4 text-on-surface-variant">None</td>
+<td class="py-6 px-4 text-on-surface-variant">High</td>
+<td class="py-6 px-4 font-bold text-white">Absolute</td>
+</tr>
+<tr>
+<td class="py-6 px-4 font-medium">Privacy First</td>
+<td class="py-6 px-4 text-on-surface-variant">Public Gallery</td>
+<td class="py-6 px-4 text-on-surface-variant">Public Gallery</td>
+<td class="py-6 px-4 font-bold text-white">Ghost Mode Native</td>
+</tr>
+<tr>
+<td class="py-6 px-4 font-medium">Consent Layer</td>
+<td class="py-6 px-4 text-on-surface-variant">Implicit</td>
+<td class="py-6 px-4 text-on-surface-variant">Variable</td>
+<td class="py-6 px-4 font-bold text-white">Strict Onboarding</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Monetization / Spur+ -->
+<section class="py-24 px-margin-mobile">
+<div class="max-w-container-max mx-auto">
+<div class="relative glass-card rounded-3xl p-12 overflow-hidden border-tertiary/20">
+<div class="absolute top-0 right-0 w-64 h-64 bg-tertiary/5 blur-[100px] -z-10"></div>
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div class="space-y-6">
+<span class="inline-block bg-tertiary/10 text-tertiary px-4 py-1 rounded-full font-label-sm text-label-sm tracking-widest uppercase">Premium Experience</span>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg">Elevate with Spur+</h2>
+<p class="font-body-lg text-on-surface-variant">For those who demand total control and priority access to the platform's most exclusive features.</p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">check_circle</span>
+<span>Priority matching in crowded venues</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">visibility_off</span>
+<span>Advanced Anonymous Mode (Ghosting)</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">distance</span>
+<span>Global Roaming - See intent anywhere</span>
+</li>
+</ul>
+</div>
+<div class="relative">
+<div class="aspect-square glass-card rounded-2xl flex items-center justify-center p-8 border-tertiary/30">
+<img class="w-full h-full object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-700" alt="Spur+ Premium Experience" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect fill='%23161619' width='400' height='400'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%23FF2E63' text-anchor='middle' dominant-baseline='middle'%3ESPUR+%3C/text%3E%3C/svg%3E"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-32 text-center px-margin-mobile">
+<div class="max-w-2xl mx-auto space-y-10">
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg">The world is waiting. Are you?</h2>
+<p class="font-body-lg text-on-surface-variant">Join 50,000+ early adopters securing their place for the private beta launch.</p>
+<button class="bg-intent-pink text-white px-12 py-5 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,46,99,0.4)]">
+                    Secure Beta Access
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 bg-surface-dim border-t border-white/5">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto space-y-base md:space-y-0">
+<div class="flex flex-col items-center md:items-start space-y-2">
+<div class="font-headline-md text-on-surface font-bold">Spur</div>
+<div class="font-body-md text-body-md text-on-surface-variant opacity-80 hover:opacity-100 cursor-default">© 2024 Spur. Discreetly Delivered.</div>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Legal</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Safety Guide</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Cookie Policy</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for Intent Button
+        const intentBtn = document.querySelector('.intent-button-glow');
+        if (intentBtn) {
+            intentBtn.addEventListener('click', () => {
+                intentBtn.classList.add('scale-90');
+                setTimeout(() => intentBtn.classList.remove('scale-90'), 150);
+            });
+        }
 
-                    <div class="mt-12 pt-8 border-t border-slate-800 fade-in-up delay-4">
-                        <p class="text-gray-400 text-sm mb-4">BUILT ON CONSENT & PRIVACY</p>
-                        <div class="flex items-center space-x-6">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl">🔒</span>
-                                <span class="text-gray-400">Private by Design</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl">⚡</span>
-                                <span class="text-gray-400">Real-Time Matching</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        // Simple scroll reveal for glass cards
+        const observerOptions = {
+            threshold: 0.1
+        };
 
-                <!-- Hero Visual -->
-                <div class="hidden md:flex justify-center relative h-96">
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl blur-3xl opacity-20 hero-glow"></div>
-                    <div class="relative flex items-center justify-center w-full h-full fade-in-up delay-2">
-                        <svg class="w-48 h-48" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Outer circle with gradient -->
-                            <defs>
-                                <linearGradient id="buttonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#b300ff;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#ff006e;stop-opacity:1" />
-                                </linearGradient>
-                                <filter id="glow">
-                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                                    <feMerge>
-                                        <feMergeNode in="coloredBlur"/>
-                                        <feMergeNode in="SourceGraphic"/>
-                                    </feMerge>
-                                </filter>
-                            </defs>
-                            <circle cx="100" cy="100" r="90" fill="url(#buttonGradient)" filter="url(#glow)" opacity="0.9"/>
-                            <circle cx="100" cy="100" r="85" fill="rgba(179, 0, 255, 0.9)"/>
-
-                            <!-- Lightning bolt icon -->
-                            <g transform="translate(70, 80)">
-                                <path d="M30 0L10 25L18 25L8 50L50 18L35 18L45 0Z" fill="white" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
-                            </g>
-
-                            <!-- One Tap text -->
-                            <text x="100" y="130" text-anchor="middle" font-size="16" font-weight="bold" fill="white" font-family="system-ui">ONE TAP</text>
-                            <text x="100" y="150" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.8)" font-family="system-ui">Activate Intent</text>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works -->
-    <section id="how" class="py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl font-black mb-4 text-center fade-in-up">How It Works</h2>
-            <p class="text-xl text-gray-400 text-center mb-16 fade-in-up delay-1">Three simple steps. Seconds to connection.</p>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Step 1 -->
-                <div class="card-hover bg-slate-900 border border-slate-800 rounded-xl p-8 fade-in-up delay-2">
-                    <div class="step-number w-16 h-16 bg-purple-600/20 rounded-lg flex items-center justify-center mb-6">
-                        <span class="text-3xl font-black text-purple-400">1</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">Activate Intent</h3>
-                    <p class="text-gray-400">Choose what you're open to right now. One tap. That's it.</p>
-                    <div class="mt-6 space-y-2 text-sm">
-                        <div class="text-purple-400">→ Open to Intimacy</div>
-                        <div class="text-purple-400">→ Looking to Hook Up</div>
-                        <div class="text-purple-400">→ Casual Connection</div>
-                        <div class="text-purple-400">→ Romantic</div>
-                    </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="card-hover bg-slate-900 border border-slate-800 rounded-xl p-8 fade-in-up delay-3">
-                    <div class="step-number w-16 h-16 bg-pink-600/20 rounded-lg flex items-center justify-center mb-6">
-                        <span class="text-3xl font-black text-pink-400">2</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">Local Matching</h3>
-                    <p class="text-gray-400">Spur finds people nearby with the same intent active right now.</p>
-                    <div class="mt-6 space-y-2 text-sm text-gray-400">
-                        <div>🏢 Same building</div>
-                        <div>🏙️ Same block</div>
-                        <div>🎉 Same venue</div>
-                        <div>📍 Ultra-local radius</div>
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="card-hover bg-slate-900 border border-slate-800 rounded-xl p-8 fade-in-up delay-4">
-                    <div class="step-number w-16 h-16 bg-purple-600/20 rounded-lg flex items-center justify-center mb-6">
-                        <span class="text-3xl font-black text-purple-400">3</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">Instant Connection</h3>
-                    <p class="text-gray-400">Mutual consent. Instant chat. Real connection. No waiting.</p>
-                    <div class="mt-6 space-y-2 text-sm">
-                        <div class="text-green-400">✓ Both consented</div>
-                        <div class="text-green-400">✓ Verified profiles</div>
-                        <div class="text-green-400">✓ Private by default</div>
-                        <div class="text-green-400">✓ Ready to connect</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Intent Modes -->
-    <section id="intent" class="py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl font-black mb-4 text-center fade-in-up">Intent Modes</h2>
-            <p class="text-xl text-gray-400 text-center mb-16 fade-in-up delay-1">Choose your moment. Spur does the rest.</p>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Hookup Mode -->
-                <div class="card-hover bg-gradient-to-br from-pink-900/20 to-slate-900 border border-pink-500/30 rounded-xl p-8 hover:border-pink-500 fade-in-up delay-2">
-                    <div class="flex items-center gap-3 mb-4">
-                        <svg class="icon-glow w-8 h-8 text-pink-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2v6m0 4v10M8 8l4-4 4 4M8 16l4 4 4-4"></path>
-                        </svg>
-                        <h3 class="text-2xl font-bold">Hookup Mode</h3>
-                    </div>
-                    <p class="text-gray-300 mb-6">Casual, no-pressure encounters. Right now or later tonight.</p>
-                    <ul class="space-y-3 text-gray-400">
-                        <li class="flex items-start"><span class="text-pink-400 mr-3">→</span>Specify your vibe</li>
-                        <li class="flex items-start"><span class="text-pink-400 mr-3">→</span>Time window (now / later)</li>
-                        <li class="flex items-start"><span class="text-pink-400 mr-3">→</span>Share boundaries upfront</li>
-                        <li class="flex items-start"><span class="text-pink-400 mr-3">→</span>Match on compatibility</li>
-                    </ul>
-                </div>
-
-                <!-- Relationship Mode -->
-                <div class="card-hover bg-gradient-to-br from-purple-900/20 to-slate-900 border border-purple-500/30 rounded-xl p-8 hover:border-purple-500 fade-in-up delay-3">
-                    <div class="flex items-center gap-3 mb-4">
-                        <svg class="icon-glow w-8 h-8 text-purple-500 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                        <h3 class="text-2xl font-bold">Relationship Mode</h3>
-                    </div>
-                    <p class="text-gray-300 mb-6">Seeking something longer-term? Get compatibility matching.</p>
-                    <ul class="space-y-3 text-gray-400">
-                        <li class="flex items-start"><span class="text-purple-400 mr-3">→</span>Personality-based matching</li>
-                        <li class="flex items-start"><span class="text-purple-400 mr-3">→</span>Preference alignment</li>
-                        <li class="flex items-start"><span class="text-purple-400 mr-3">→</span>Real-time intent visibility</li>
-                        <li class="flex items-start"><span class="text-purple-400 mr-3">→</span>Build genuine connection</li>
-                    </ul>
-                </div>
-
-                <!-- Casual Connection -->
-                <div class="card-hover bg-gradient-to-br from-blue-900/20 to-slate-900 border border-blue-500/30 rounded-xl p-8 hover:border-blue-500 fade-in-up delay-4">
-                    <div class="flex items-center gap-3 mb-4">
-                        <svg class="icon-glow w-8 h-8 text-blue-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                        <h3 class="text-2xl font-bold">Casual Connection</h3>
-                    </div>
-                    <p class="text-gray-300 mb-6">Hanging out, exploring, no expectations attached.</p>
-                    <ul class="space-y-3 text-gray-400">
-                        <li class="flex items-start"><span class="text-blue-400 mr-3">→</span>Find friends & connections</li>
-                        <li class="flex items-start"><span class="text-blue-400 mr-3">→</span>Low-pressure exploration</li>
-                        <li class="flex items-start"><span class="text-blue-400 mr-3">→</span>Open to surprises</li>
-                        <li class="flex items-start"><span class="text-blue-400 mr-3">→</span>No commitment needed</li>
-                    </ul>
-                </div>
-
-                <!-- Open to Intimacy -->
-                <div class="card-hover bg-gradient-to-br from-red-900/20 to-slate-900 border border-red-500/30 rounded-xl p-8 hover:border-red-500 fade-in-up delay-4">
-                    <div class="flex items-center gap-3 mb-4">
-                        <svg class="icon-glow w-8 h-8 text-red-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="1"></circle>
-                            <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 0l4.24-4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08 0l4.24 4.24"></path>
-                        </svg>
-                        <h3 class="text-2xl font-bold">Open to Intimacy</h3>
-                    </div>
-                    <p class="text-gray-300 mb-6">Explore with someone who's on the same wavelength.</p>
-                    <ul class="space-y-3 text-gray-400">
-                        <li class="flex items-start"><span class="text-red-400 mr-3">→</span>Find compatible partners</li>
-                        <li class="flex items-start"><span class="text-red-400 mr-3">→</span>Mutual exploration</li>
-                        <li class="flex items-start"><span class="text-red-400 mr-3">→</span>Chemistry-based matching</li>
-                        <li class="flex items-start"><span class="text-red-400 mr-3">→</span>Respectful & authentic</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Safety & Privacy -->
-    <section id="safety" class="py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl font-black mb-4 text-center fade-in-up">Safety First. Always.</h2>
-            <p class="text-xl text-gray-400 text-center mb-16 fade-in-up delay-1">Privacy by design. Consent in every interaction.</p>
-
-            <div class="grid md:grid-cols-2 gap-12">
-                <div class="space-y-8">
-                    <div class="flex items-start space-x-4 fade-in-up delay-2">
-                        <svg class="icon-glow w-8 h-8 text-purple-400 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                        </svg>
-                        <div>
-                            <h3 class="font-bold text-lg mb-2">Privacy by Design</h3>
-                            <p class="text-gray-400">No public profiles. No 'last seen' status. Approximate location only. Your data stays yours.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start space-x-4 fade-in-up delay-3">
-                        <svg class="icon-glow w-8 h-8 text-green-400 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        <div>
-                            <h3 class="font-bold text-lg mb-2">Verified Profiles</h3>
-                            <p class="text-gray-400">Every user verified. AI-driven fake detection. No bots. No catfish. Only real people.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start space-x-4 fade-in-up delay-4">
-                        <svg class="icon-glow w-8 h-8 text-blue-400 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            <path d="M9 12l2 2 4-4"></path>
-                        </svg>
-                        <div>
-                            <h3 class="font-bold text-lg mb-2">Consent Built-In</h3>
-                            <p class="text-gray-400">Two-way mutual intent required to match. Consent is not implied. It's explicit.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="space-y-8">
-                    <div class="flex items-start space-x-4 fade-in-up delay-2">
-                        <svg class="icon-glow w-8 h-8 text-orange-400 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        <div>
-                            <h3 class="font-bold text-lg mb-2">Auto-Clearing History</h3>
-                            <p class="text-gray-400">Conversations disappear. Chats auto-clear. You control what stays and what goes.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start space-x-4 fade-in-up delay-3">
-                        <svg class="icon-glow w-8 h-8 text-red-400 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="16"></line>
-                            <line x1="8" y1="12" x2="16" y2="12"></line>
-                        </svg>
-                        <div>
-                            <h3 class="font-bold text-lg mb-2">Emergency Tools</h3>
-                            <p class="text-gray-400">One-tap panic button. Immediate exit. Safety features that actually matter.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start space-x-4 fade-in-up delay-4">
-                        <svg class="icon-glow w-8 h-8 text-indigo-400 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 6v6l4 2"></path>
-                        </svg>
-                        <div>
-                            <h3 class="font-bold text-lg mb-2">Community Standards</h3>
-                            <p class="text-gray-400">Centered on consent and respect. Harassment, abuse, and deception result in instant bans.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-12 bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-xl p-8 text-center fade-in-up delay-4">
-                <h3 class="text-2xl font-bold mb-3">The Spur Difference</h3>
-                <p class="text-gray-300 mb-6">Spur is the safest adult-intent platform, not the riskiest. Safety and consent are not features we added. They are the foundation.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Download -->
-    <section id="download" class="py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-800">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-5xl font-black mb-6 fade-in-up">Ready to Connect?</h2>
-            <p class="text-xl text-gray-300 mb-12 fade-in-up delay-1">Download Spur. Activate intent. Find connection in seconds.</p>
-
-            <div class="flex flex-col sm:flex-row gap-6 justify-center">
-                <a href="#" class="card-hover group bg-slate-900 border border-slate-800 rounded-xl p-8 flex flex-col items-center hover:border-purple-500 fade-in-up delay-2">
-                    <svg class="icon-glow w-16 h-16 mb-4 text-purple-400" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.05 13.5c-.91 0-1.72.44-2.84 1.54.3-1.48 1.14-2.84 2.3-3.77-1.58-2.04-4.09-3.27-6.51-3.27-4.63 0-8.4 3.77-8.4 8.4 0 4.63 3.77 8.4 8.4 8.4 2.42 0 4.93-1.23 6.51-3.27-1.16-.93-2-2.29-2.3-3.77 1.12 1.1 1.93 1.54 2.84 1.54 1.97 0 3.57-1.6 3.57-3.57 0-1.97-1.6-3.57-3.57-3.57z"></path>
-                    </svg>
-                    <h3 class="text-2xl font-bold mb-2">iOS</h3>
-                    <p class="text-gray-400 mb-4">App Store</p>
-                    <div class="text-sm text-purple-400 font-semibold">Download Now</div>
-                </a>
-
-                <a href="#" class="card-hover group bg-slate-900 border border-slate-800 rounded-xl p-8 flex flex-col items-center hover:border-pink-500 fade-in-up delay-3">
-                    <svg class="icon-glow w-16 h-16 mb-4 text-pink-400" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M6 17c0 2.21 1.79 4 4 4s4-1.79 4-4c0-2.05-1.53-3.76-3.56-3.97V6.99c0-.55-.45-1-1-1s-1 .45-1 1v6.04C7.53 13.24 6 14.95 6 17zm11-7h2V7c0-.55.45-1 1-1s1 .45 1 1v3h2c.55 0 1 .45 1 1s-.45 1-1 1h-2v2c0 .55-.45 1-1 1s-1-.45-1-1v-2h-2c-.55 0-1-.45-1-1s.45-1 1-1z"></path>
-                    </svg>
-                    <h3 class="text-2xl font-bold mb-2">Android</h3>
-                    <p class="text-gray-400 mb-4">Google Play</p>
-                    <div class="text-sm text-pink-400 font-semibold">Download Now</div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-800 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="border-t border-slate-800 pt-8">
-                <div class="flex justify-between items-center">
-                    <p class="text-gray-500 text-sm">&copy; 2026 SPUR. All rights reserved.</p>
-                    <p class="text-gray-500 text-sm">Desire. Consent. Connection.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Smooth scroll with preventDefault
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
                 }
             });
+        }, observerOptions);
+
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.classList.add('opacity-0', 'translate-y-8', 'transition-all', 'duration-1000');
+            observer.observe(card);
         });
     </script>
-</body>
-</html>
+</body></html>
